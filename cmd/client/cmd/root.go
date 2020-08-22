@@ -10,10 +10,10 @@ var (
 )
 
 var RootCmd = &cobra.Command{
-	Use:     "server",
+	Use:     "client",
 	Version: "0.0.1",
-	Short:   "Start server",
-	Long:    "Start server and accept connection from client",
+	Short:   "Start Client",
+	Long:    "Start client and establish connection to server",
 }
 
 const helpTemplate = `{{.Short}}
@@ -24,18 +24,14 @@ func init() {
 		&Port,
 		"port", "p",
 		8989,
-		"Port for running server",
+		"Port of running server",
 	)
 
 	RootCmd.PersistentFlags().StringVarP(
 		&ServerName,
 		"name", "n",
-		"chat-server",
-		"Chat server name",
+		"chat-client",
+		"Chat client name",
 	)
-
-}
-
-func Execute() {
 
 }
