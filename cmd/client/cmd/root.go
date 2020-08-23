@@ -5,6 +5,7 @@ import (
 )
 
 var (
+	ServerAddr string
 	Port       int
 	ServerName string
 )
@@ -32,6 +33,13 @@ func init() {
 		"name", "n",
 		"chat-client",
 		"Chat client name",
+	)
+
+	RootCmd.PersistentFlags().StringVarP(
+		&ServerAddr,
+		"server", "s",
+		"127.0.0.1",
+		"Server IP to connect",
 	)
 
 }

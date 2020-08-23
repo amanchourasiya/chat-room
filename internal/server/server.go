@@ -1,10 +1,11 @@
 package server
 
 import (
-	"bufio"
 	"fmt"
 	"net"
-	"os"
+	"sync"
+
+	"github.com/amanchourasiya/chat-room/internal/message"
 )
 
 type Server struct {
@@ -20,12 +21,16 @@ func (server *Server) Start() {
 	ln, _ := net.Listen("tcp", port)
 	conn, _ := ln.Accept()
 
-	for {
-		message, _ := bufio.NewReader(conn).ReadString('\n')
-		fmt.Printf("Message Received: %s\n", string(message))
-		reader := bufio.NewReader(os.Stdin)
-		fmt.Printf("Enter your message: ")
-		text, _ := reader.ReadString('\n')
-		fmt.Fprintf(conn, text+"\n")
-	}
+	sendChan := make(chan string)
+	receiveChan := make(chan string)
+	var wg sync.WaitGroup
+	wg.Add(4)
+
+	fmt.Printf("Starting all go routines\n")
+	go message.Receive(&wg, receiveChan, conn)
+	go message.PrintMessage(&wg, receiveChan)
+	go message.Send(&wg, sendChan, conn)
+	go message.ReadMessage(&wg, sendChan)
+	fmt.Printf("Finished all go routines\n")
+	wg.Wait()
 }

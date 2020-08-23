@@ -18,6 +18,11 @@ func serve(_ *cobra.Command, _ []string) error {
 		fmt.Printf("Entered server name %s\n", cmd.ServerName)
 		clnt.Name = cmd.ServerName
 	}
+	if cmd.ServerAddr != "" {
+		fmt.Printf("Connecting to server: %s\n", cmd.ServerAddr)
+		clnt.ServerAddr = cmd.ServerAddr
+	}
+
 	clnt.Start()
 
 	return nil
